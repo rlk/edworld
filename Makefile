@@ -1,4 +1,4 @@
--include ../../Makedefs
+-include ../thumb/Makedefs
 
 #------------------------------------------------------------------------------
 
@@ -10,10 +10,10 @@ DEPS= $(OBJS:.o=.d)
 
 #------------------------------------------------------------------------------
 
-THUMB = ../../src/libthumb.a
+THUMB = ../thumb/src/libthumb.a
 
-INCDIR += -I../../include
-LIBDIR += -L../../src
+INCDIR += -I../thumb/include
+LIBDIR += -L../thumb/src
 
 CFLAGS += $(shell $(SDLCONF) --cflags) \
 	  $(shell $(FT2CONF) --cflags)
