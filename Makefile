@@ -9,18 +9,18 @@ DEPS= $(OBJS:.o=.d)
 
 #------------------------------------------------------------------------------
 
-ifneq (,$(STATIC))
-	CFLAGS += -I../thumb/include
-	LIBS   +=   ../thumb/src/libthumb.a
+CFLAGS += -I../thumb/include
+
+ifeq (,$(STATIC))
+	THUMB = -L../thumb/src -lthumb
 else
-	CFLAGS += -I../thumb/include
-	LIBS   += -L../thumb/src -lthumb
+	THUMB = ../thumb/src/libthumb.a
 endif
 
 #------------------------------------------------------------------------------
 
-$(TARG) : $(OBJS) $(THUMB)
-	$(CXX) $(CFLAGS) -o $(TARG) $(OBJS) $(LIBS)
+$(TARG) : $(OBJS)
+	$(CXX) $(CFLAGS) -o $(TARG) $(OBJS) $(THUMB) $(LIBS)
 
 clean :
 	$(RM) $(OBJS) $(DEPS) $(TARG)
