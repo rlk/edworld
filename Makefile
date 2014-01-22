@@ -10,20 +10,13 @@ DEPS= $(OBJS:.o=.d)
 
 #------------------------------------------------------------------------------
 
-THUMB = ../thumb/src/libthumb.a
-
-INCDIR += -I../thumb/include
-LIBDIR += -L../thumb/src
-
-CFLAGS += $(shell $(SDLCONF) --cflags) \
-	  $(shell $(FT2CONF) --cflags)
-
-LIBS = $(THUMB) $(LIBFT2) $(LIBMXML) $(LIBODE) $(LIBTIF) $(LIBJPG) $(LIBPNG) $(LIBBZ2) $(LIBZ) $(LIBSDL) $(LIBGLEW) $(LIBEXT) -lm
+CFLAGS += -I../thumb/include
+LIBS   += -L../thumb/src -lthumb
 
 #------------------------------------------------------------------------------
 
 $(TARG) : $(OBJS) $(THUMB)
-	$(CXX) $(CFLAGS) -o $(TARG) $(OBJS) $(LIBDIR) $(LIBS)
+	$(CXX) $(CFLAGS) -o $(TARG) $(OBJS) $(LIBS)
 
 clean :
 	$(RM) $(OBJS) $(DEPS) $(TARG)
