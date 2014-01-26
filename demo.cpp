@@ -115,11 +115,9 @@ demo::demo(const std::string& exe,
 
     world = new wrl::world();
 
-    edit = new mode::edit(world);
-    play = new mode::play(world);
-    info = new mode::info(world);
-
-    // world->load("world/test.xml");
+    edit  = new mode::edit(world);
+    play  = new mode::play(world);
+    info  = new mode::info(world);
 
     goto_mode(edit);
 }
@@ -147,6 +145,17 @@ void demo::goto_mode(mode::mode *next)
     if (next) { E.mk_start(); next->process_event(&E); }
 
     curr = next;
+}
+
+void demo::host_up(std::string config)
+{
+    app::prog::host_up(config);
+}
+
+void demo::host_dn()
+{
+    goto_mode(edit);
+    app::prog::host_dn();
 }
 
 //-----------------------------------------------------------------------------
@@ -179,18 +188,22 @@ bool demo::process_key(app::event *E)
 
 bool demo::process_event(app::event *E)
 {
-    // Attempt to process the given event.
+    // Handle events or offer them to the mode and parent. Case fall-through
+    // makes this happen. START and CLOSE are discarded to ensure that host
+    // bounce doesn't impact world state.
 
     switch (E->get_type())
     {
-        case E_KEY: if (process_key(E)) return true; else break;
+        case E_START: return false;
+        case E_CLOSE: return false;
+
+        case E_KEY:
+            if (process_key(E)) return true;
+
+        default:
+            if (curr && curr->process_event(E)) return true;
+            if (        prog::process_event(E)) return true;
     }
-
-    // Allow the application base or current mode  to handle the event.
-
-    if (curr && curr->process_event(E)) return true;
-    if (        prog::process_event(E)) return true;
-
     return false;
 }
 

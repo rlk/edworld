@@ -36,6 +36,24 @@ namespace ogl
 
 class demo : public app::prog
 {
+public:
+
+    demo(const std::string&, const std::string&);
+   ~demo();
+
+    bool process_event(app::event *);
+
+    ogl::aabb prep(int, const app::frustum * const *);
+    void      lite(int, const app::frustum * const *);
+    void      draw(int, const app::frustum *, int);
+
+protected:
+
+    virtual void host_up(std::string);
+    virtual void host_dn();
+
+private:
+
     // Entity state.
 
     wrl::world *world;
@@ -68,17 +86,6 @@ class demo : public app::prog
     // Event handlers
 
     bool process_key(app::event *);
-
-public:
-
-    demo(const std::string&, const std::string&);
-   ~demo();
-
-    bool process_event(app::event *);
-
-    ogl::aabb prep(int, const app::frustum * const *);
-    void      lite(int, const app::frustum * const *);
-    void      draw(int, const app::frustum *, int);
 };
 
 //-----------------------------------------------------------------------------
