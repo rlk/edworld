@@ -119,7 +119,7 @@ demo::demo(const std::string& exe,
     play  = new mode::play(world);
     info  = new mode::info(world);
 
-    goto_mode(edit);
+    goto_mode(info);
 }
 
 demo::~demo()
