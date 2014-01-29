@@ -4,6 +4,8 @@ Edworld is a sandbox interactive built on the Thumb engine. Edworld exposes
 Thumb's real-time renderer, in-engine scene editor, and ODE-based rigid body
 dynamics simulation.
 
+    https://github.com/rlk/edworld
+
 ## Application Controls
 
     TAB ... Toggle this GUI
@@ -16,6 +18,15 @@ dynamics simulation.
     Joint .... Create and configure joints and motors
     Light .... Create and configure spot lights and sky backgrounds
     Config ... Change the display properties
+
+## File System Browsing
+
+    When an absolute path (beginning with / or C:/) is entered in a file
+    selection directory box, the browser will display your hard drive.
+
+    When a relative path is entered, the browser will display the virtual
+    file system: an archive of data statically bound with the executable,
+    overridable in ~/.thumb.
 
 ## Editing Controls
 
@@ -44,11 +55,10 @@ dynamics simulation.
     Return ... Center the transform constraint about the origin
 
     B ... Convert the selected set of entities to a dynamic rigid body
+    J ... Set the target of the selected joints to the selected body.
     N ... Convert the selected set of entities to a static non-body
     G ... Grow the current selection to include other entities in selected
           bodies, or entities targeted by selected joints.
-    J ... Set the target of the selected joints to the selected body.  To link
-          two bodies by a joint, include the joint as a part of the first body
-          using B, then select the joint and the second body, and link them
-          using J.
 
+    To link two bodies by a joint, include the joint as a part of the first body
+    using B, then select the joint and the second body and link these using J.
