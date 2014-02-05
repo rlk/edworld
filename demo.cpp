@@ -25,6 +25,7 @@
 #include <app-view.hpp>
 #include <app-host.hpp>
 #include <app-glob.hpp>
+#include <app-data.hpp>
 
 #include <wrl-world.hpp>
 #include <etc-vector.hpp>
@@ -109,6 +110,15 @@ demo::demo(const std::string& exe,
            const std::string& tag)
     : app::prog(exe, tag), world(0), edit(0), play(0), info(0), curr(0)
 {
+    // Add the static data archive.
+
+    extern unsigned char data_zip[];
+    extern unsigned int  data_zip_len;
+
+    ::data->add_pack_archive(data_zip, data_zip_len);
+
+    // Initialize the GLSL uniform state.
+
     init_uniforms();
 
     // Initialize the application state.

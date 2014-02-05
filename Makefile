@@ -3,7 +3,7 @@
 #------------------------------------------------------------------------------
 
 TARG= edworld
-OBJS= demo.o main.o
+OBJS= demo.o main.o data.o
 
 DEPS= $(OBJS:.o=.d)
 
@@ -24,6 +24,22 @@ $(TARG) : $(OBJS)
 
 clean :
 	$(RM) $(OBJS) $(DEPS) $(TARG)
+
+#------------------------------------------------------------------------------
+
+DATA= $(shell find data -name \*.md   \
+                     -o -name \*.xml  \
+                     -o -name \*.ttf  \
+                     -o -name \*.obj  \
+                     -o -name \*.png  \
+                     -o -name \*.vert \
+                     -o -name \*.frag)
+
+data.zip : $(DATA)
+	(cd data && zip -FS9r ../data.zip $(subst data/,,$(DATA)))
+
+data.cpp : data.zip
+	xxd -i data.zip > data.cpp
 
 #------------------------------------------------------------------------------
 
