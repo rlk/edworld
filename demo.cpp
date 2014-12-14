@@ -116,31 +116,10 @@ demo::demo(const std::string& exe,
     extern unsigned int  data_zip_len;
 
     ::data->add_pack_archive(data_zip, data_zip_len);
-
-    // Initialize the GLSL uniform state.
-
-    init_uniforms();
-
-    // Initialize the application state.
-
-    world = new wrl::world();
-
-    edit  = new mode::edit(world);
-    play  = new mode::play(world);
-    info  = new mode::info(world);
-
-    goto_mode(info);
 }
 
 demo::~demo()
 {
-    free_uniforms();
-
-    if (info)  delete info;
-    if (play)  delete play;
-    if (edit)  delete edit;
-
-    if (world) delete world;
 }
 
 //-----------------------------------------------------------------------------
@@ -159,13 +138,38 @@ void demo::goto_mode(mode::mode *next)
 
 void demo::host_up(std::string config)
 {
+    // Initialize the GLSL uniform state.
+
+    init_uniforms();
+
+    // Initialize the application state.
+
+    world = new wrl::world();
+
+    edit  = new mode::edit(world);
+    play  = new mode::play(world);
+    info  = new mode::info(world);
+
     app::prog::host_up(config);
+
+    goto_mode(info);
 }
 
 void demo::host_dn()
 {
     goto_mode(edit);
+
     app::prog::host_dn();
+
+    free_uniforms();
+
+    if (info)  delete info;
+    if (play)  delete play;
+    if (edit)  delete edit;
+
+    if (world) delete world;
+
+    curr = 0;
 }
 
 //-----------------------------------------------------------------------------
