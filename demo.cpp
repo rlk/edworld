@@ -112,10 +112,10 @@ demo::demo(const std::string& exe,
 {
     // Add the static data archive.
 
-    extern unsigned char data_zip[];
-    extern unsigned int  data_zip_len;
+    extern unsigned char edworld_data[];
+    extern unsigned int  edworld_data_len;
 
-    ::data->add_pack_archive(data_zip, data_zip_len);
+    ::data->add_pack_archive(edworld_data, edworld_data_len);
 }
 
 demo::~demo()

@@ -1,45 +1,40 @@
--include ../thumb/Makedefs
+# EdWorld -- Linux / OS X Makefile
+
+THUMB_DIR = ../thumb
+
+include $(THUMB_DIR)/Makedefs
+
+APPLIBS = -L$(THUMB_DIR)/$(CONFIG) -lthumb
+CFLAGS += -I$(THUMB_DIR)/include
+
+B2C = $(THUMB_DIR)/etc/bin2c
+
+THUMB = $(THUMB_DIR)/$(CONFIG)/libthumb.a
 
 #------------------------------------------------------------------------------
 
-TARG= edworld
 OBJS= demo.o main.o data.o
-
 DEPS= $(OBJS:.o=.d)
+TARG= edworld
 
 #------------------------------------------------------------------------------
 
-CFLAGS += -I../thumb/include
+$(CONFIG)/$(TARG) : $(CONFIG) $(OBJS) $(THUMB)
+	$(CXX) $(CFLAGS) -o $@ $(OBJS) $(THUMB) $(LIBS)
 
-ifeq (,$(STATIC))
-	THUMB = -L../thumb/src -lthumb
-else
-	THUMB = ../thumb/src/libthumb.a
-endif
-
-#------------------------------------------------------------------------------
-
-$(TARG) : $(OBJS)
-	$(CXX) $(CFLAGS) -o $(TARG) $(OBJS) $(THUMB) $(LIBS)
+$(CONFIG) :
+	mkdir -p $(CONFIG)
 
 clean :
-	$(RM) $(OBJS) $(DEPS) $(TARG)
+	$(RM) $(OBJS) $(DEPS) $(TARG) data/data.zip
 
 #------------------------------------------------------------------------------
 
-DATA= $(shell find data -name \*.md   \
-                     -o -name \*.xml  \
-                     -o -name \*.ttf  \
-                     -o -name \*.obj  \
-                     -o -name \*.png  \
-                     -o -name \*.vert \
-                     -o -name \*.frag)
+data.cpp : data/data.zip
+	$(B2C) edworld_data < $< > $@
 
-data.zip : $(DATA)
-	(cd data && zip -FS9r ../data.zip $(subst data/,,$(DATA)))
-
-data.cpp : data.zip
-	xxd -i data.zip > data.cpp
+data/data.zip :
+	$(MAKE) -C data
 
 #------------------------------------------------------------------------------
 
