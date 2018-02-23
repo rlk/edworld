@@ -2,25 +2,31 @@
 
 THUMB_DIR = ../thumb
 
-include $(THUMB_DIR)/Makedefs
+-include $(THUMB_DIR)/Makedefs
 
 APPLIBS = -L$(THUMB_DIR)/$(CONFIG) -lthumb
 CFLAGS += -I$(THUMB_DIR)/include
 
 B2C = $(THUMB_DIR)/etc/bin2c
 
-THUMB = $(THUMB_DIR)/$(CONFIG)/libthumb.a
+#------------------------------------------------------------------------------
+
+# If static Thumb library changes, then edworld must be rebuilt.
+
+ifndef DYNAMIC
+	THUMB = $(THUMB_DIR)/$(CONFIG)/libthumb.a
+endif
 
 #------------------------------------------------------------------------------
 
 OBJS= demo.o main.o data.o
-DEPS= $(OBJS:.o=.d)
+DEPS= $(filter-out data.d, $(OBJS:.o=.d))
 TARG= edworld
 
 #------------------------------------------------------------------------------
 
 $(CONFIG)/$(TARG) : $(CONFIG) $(OBJS) $(THUMB)
-	$(CXX) $(CFLAGS) -o $@ $(OBJS) $(THUMB) $(LIBS)
+	$(CXX) $(CFLAGS) -o $@ $(OBJS) $(APPLIBS) $(LIBS)
 
 $(CONFIG) :
 	mkdir -p $(CONFIG)
@@ -35,6 +41,8 @@ data.cpp : data/data.zip
 
 data/data.zip :
 	$(MAKE) -C data
+
+.PHONY : data/data.zip
 
 #------------------------------------------------------------------------------
 
